@@ -1,0 +1,3 @@
+he:
+  parent1:
+    key1: "Hello, %{name1}, this is %{day_of_week1}"
