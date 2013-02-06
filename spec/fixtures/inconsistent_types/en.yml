@@ -1,0 +1,6 @@
+en:
+  parent1:
+    key1: "Hello, %{name}, this is %{day_of_week}"
+  parent2:
+    key2:
+      subkey: 'bla bla'

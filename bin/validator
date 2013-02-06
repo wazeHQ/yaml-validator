@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/validator'
+
+def main
+  root_path = '.'
+  root_path = ARGV[0] if ARGV.length > 0
+  
+  puts "Validating #{root_path}"
+  errors = Validator.new(root_path).validate()
+  puts errors
+end
+
+main()

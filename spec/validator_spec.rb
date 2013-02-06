@@ -6,13 +6,28 @@ describe Validator do
   
   describe "#validate" do
     
-    it "returns two errors" do
-      validator = Validator.new('spec/fixtures/wrong_variables')
-      errors = validator.validate()
-      errors.should == [
-        "he.yml: parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
-        "he.yml: parent1.key1: missing variable 'day_of_week1' (available options: name, day_of_week)"
-      ]
+    describe "wrong_variables scenario" do
+      it "returns two errors" do
+        validator = Validator.new('spec/fixtures/wrong_variables')
+        errors = validator.validate()
+        errors.should == [
+          "he.yml: parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
+          "he.yml: parent1.key1: missing variable 'day_of_week1' (available options: name, day_of_week)"
+        ]
+      end
+    end
+    
+    describe "inconsistent_types scenario" do
+      it "returns inconsistent type error" do
+        validator = Validator.new('spec/fixtures/inconsistent_types')
+        errors = validator.validate()
+        errors.should == [
+          "he.yml: parent1.key1.subkey1 doesn't exist in en.yml",
+          "he.yml: parent2.key2 doesn't exist in en.yml",
+          "he.yml: key3 doesn't exist in en.yml",
+          "he.yml: parent3.key4 doesn't exist in en.yml"
+        ]
+      end
     end
 
   end
@@ -43,10 +58,36 @@ describe Validator do
   end
   
   describe "#get_key_en_vars" do
+    describe "for 'parent1'" do
+      it "returns nil" do
+        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator.get_key_en_vars('parent1').should be_nil
+      end
+    end
+    
     describe "for 'parent1.key1'" do
       it "returns ['name', 'day_of_week']" do
         validator = Validator.new('spec/fixtures/wrong_variables')
         validator.get_key_en_vars('parent1.key1').should == ['name', 'day_of_week']
+      end
+    end
+    
+    describe "for 'parent1.nonexisting_key'" do
+      it "returns nil" do
+        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator.get_key_en_vars('parent1.nonexisting_key').should == nil
+      end
+    end
+    describe "for 'parent1.nonexisting_parent.key1'" do
+      it "returns nil" do
+        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator.get_key_en_vars('parent1.nonexisting_parent.key1').should == nil
+      end
+    end
+    describe "for 'parent1.key1.nonexisting_subkey'" do
+      it "returns nil" do
+        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator.get_key_en_vars('parent1.key1.nonexisting_subkey').should == nil
       end
     end
   end
@@ -57,6 +98,13 @@ describe Validator do
       it "returns { parent1: { key1: ['name'] } }" do
         input = { :parent1 => { :key1 => "hello %{name}" } }
         subject.get_all_variables(input).should == { :parent1 => { :key1 => ['name'] } }
+      end
+    end
+    describe "for { parent1: { parent2: { key1: 'hello %{name}' } } }" do
+      it "returns { parent1: { parent2: { key1: ['name'] } } }" do
+        input = { :parent1 => { :parent2 => { :key1 => "hello %{name}" } } }
+        subject.get_all_variables(input).should ==
+          { :parent1 => { :parent2 => { :key1 => ['name'] } } }
       end
     end
   end

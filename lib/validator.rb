@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Validator
   
   def initialize(root_path)
@@ -42,6 +44,10 @@ class Validator
   
   def validate_item(full_key, value)
     real_vars = get_key_en_vars(full_key)
+    if real_vars.nil?
+      return ["#{full_key} doesn't exist in en.yml"]
+    end
+
     used_vars = identify_variables(value)
 
     errors = []
@@ -56,9 +62,15 @@ class Validator
   def get_key_en_vars(full_key)
     position = en_with_vars
     full_key.split('.').each do |key|
+      return nil if position.is_a? Array
+      return nil if position.nil?
       position = position[key]
     end
-    position
+    if position.is_a? Array
+      position
+    else
+      nil
+    end
   end
   
   def get_all_variables(yaml_object)
