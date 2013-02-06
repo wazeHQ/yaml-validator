@@ -1,3 +1,3 @@
-task :spec do
-  rspec "spec"
-end
+require 'rspec/core/rake_task'
+
+RSpec::Core::RakeTask.new(:spec)
