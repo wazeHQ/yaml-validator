@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    yaml-validator (0.0.1)
+      rake
+      rspec
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -16,5 +23,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rake
-  rspec
+  yaml-validator!

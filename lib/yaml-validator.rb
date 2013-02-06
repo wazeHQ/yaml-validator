@@ -1,6 +1,7 @@
 require 'yaml'
+require 'yaml-validator/version'
 
-class Validator
+class YamlValidator
   
   def initialize(root_path)
     @root_path = root_path

@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/validator'
+require_relative '../lib/yaml-validator'
 
 def main
   root_path = '.'
   root_path = ARGV[0] if ARGV.length > 0
   
   puts "Validating #{root_path}"
-  errors = Validator.new(root_path).validate()
+  errors = YamlValidator.new(root_path).validate()
   puts errors
   puts "\nfound #{errors.length} errors"
 end

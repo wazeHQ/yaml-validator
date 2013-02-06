@@ -1,14 +1,14 @@
 # encoding: utf-8
 
-require_relative '../lib/validator'
+require_relative '../lib/yaml-validator'
 
-describe Validator do
+describe YamlValidator do
   
   describe "#validate" do
     
     describe "wrong_variables scenario" do
       it "returns two errors" do
-        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator = YamlValidator.new('spec/fixtures/wrong_variables')
         errors = validator.validate()
         errors.should == [
           "he.yml: parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
@@ -19,7 +19,7 @@ describe Validator do
     
     describe "inconsistent_types scenario" do
       it "returns inconsistent type error" do
-        validator = Validator.new('spec/fixtures/inconsistent_types')
+        validator = YamlValidator.new('spec/fixtures/inconsistent_types')
         errors = validator.validate()
         errors.should == [
           "he.yml: parent1.key1.subkey1 doesn't exist in en.yml",
@@ -32,7 +32,7 @@ describe Validator do
     
     describe "invalid yaml files" do
       it "returns invalid yaml error" do
-        validator = Validator.new('spec/fixtures/invalid_yml')
+        validator = YamlValidator.new('spec/fixtures/invalid_yml')
         errors = validator.validate()
         errors.should == [
           "invalid.yml: found character that cannot start any token " + 
@@ -45,7 +45,7 @@ describe Validator do
   
   describe "#validate_yaml" do
     it "returns two errors" do
-      validator = Validator.new('spec/fixtures/wrong_variables')
+      validator = YamlValidator.new('spec/fixtures/wrong_variables')
       errors = validator.validate_yaml('spec/fixtures/wrong_variables/he.yml')
       errors == [
         "he.yml: parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
@@ -58,7 +58,7 @@ describe Validator do
   describe "#validate_item" do
     describe "for 'parent1.key1' = 'hello %{name1}, %{day_of_week1}'" do
       it "returns two errors" do
-        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator = YamlValidator.new('spec/fixtures/wrong_variables')
         errors = validator.validate_item('parent1.key1', 'hello %{name1}, %{day_of_week1}')
         errors.should == [
           "parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
@@ -71,40 +71,40 @@ describe Validator do
   describe "#get_key_en_vars" do
     describe "for 'parent1'" do
       it "returns nil" do
-        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator = YamlValidator.new('spec/fixtures/wrong_variables')
         validator.get_key_en_vars('parent1').should be_nil
       end
     end
     
     describe "for 'parent1.key1'" do
       it "returns ['name', 'day_of_week']" do
-        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator = YamlValidator.new('spec/fixtures/wrong_variables')
         validator.get_key_en_vars('parent1.key1').should == ['name', 'day_of_week']
       end
     end
     
     describe "for 'parent1.nonexisting_key'" do
       it "returns nil" do
-        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator = YamlValidator.new('spec/fixtures/wrong_variables')
         validator.get_key_en_vars('parent1.nonexisting_key').should == nil
       end
     end
     describe "for 'parent1.nonexisting_parent.key1'" do
       it "returns nil" do
-        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator = YamlValidator.new('spec/fixtures/wrong_variables')
         validator.get_key_en_vars('parent1.nonexisting_parent.key1').should == nil
       end
     end
     describe "for 'parent1.key1.nonexisting_subkey'" do
       it "returns nil" do
-        validator = Validator.new('spec/fixtures/wrong_variables')
+        validator = YamlValidator.new('spec/fixtures/wrong_variables')
         validator.get_key_en_vars('parent1.key1.nonexisting_subkey').should == nil
       end
     end
   end
   
   describe "#get_all_variables" do
-    subject { Validator.new(nil) }
+    subject { YamlValidator.new(nil) }
     describe "for { parent1: { key1: 'hello %{name}' } }" do
       it "returns { parent1: { key1: ['name'] } }" do
         input = { :parent1 => { :key1 => "hello %{name}" } }
@@ -121,7 +121,7 @@ describe Validator do
   end
   
   describe "#identify_variables" do
-    subject { Validator.new(nil) }
+    subject { YamlValidator.new(nil) }
     describe "for 'Hello, hi'" do
       it "returns []" do
         subject.identify_variables('Hello, hi').should == []
