@@ -1,6 +1,8 @@
 YAML Validator
 ==============
 
+[![Build Status](https://travis-ci.org/wazeHQ/yaml-validator.png?branch=master)](https://travis-ci.org/wazeHQ/yaml-validator)
+
 Validates .yml locale files for Ruby on Rails projects.
 
 What does it validate?
