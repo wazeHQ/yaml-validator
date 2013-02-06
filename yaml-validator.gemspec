@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = YamlValidator::VERSION
   gem.authors       = ["David Elentok"]
   gem.email         = ["3david@gmail.com"]
-  gem.description   = %q{Validates .yml locale files for Ruby on Rails projects}
+  gem.description   = %q{YAML locales validator}
   gem.summary       = %q{Validates .yml locale files for Ruby on Rails projects}
   gem.homepage      = ""
 
