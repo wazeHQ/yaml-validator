@@ -1,4 +1,4 @@
-class Verifier
+class Validator
   
   def initialize(root_path)
     @root_path = root_path
@@ -9,32 +9,32 @@ class Verifier
     @en_with_vars ||= get_all_variables(@en)
   end
   
-  def verify()
+  def validate()
     yml_files = File.join(@root_path, '*.yml')
     errors = []
     Dir[yml_files].each do |filename|
-      errors.concat verify_yaml(filename)
+      errors.concat validate_yaml(filename)
     end
     errors
   end
   
-  def verify_yaml(filepath)
+  def validate_yaml(filepath)
     yaml_object = YAML.load_file(filepath)
     yaml_object = yaml_object[yaml_object.keys[0]]
-    errors = verify_yaml_object('', yaml_object)
+    errors = validate_yaml_object('', yaml_object)
     
     filename = File.basename(filepath)
     errors.map { |err| "#{filename}: #{err}" }
   end
   
-  def verify_yaml_object(full_key, yaml_object)
+  def validate_yaml_object(full_key, yaml_object)
     errors = []
     yaml_object.each do |key, value|
       full_subkey = (full_key.empty?) ? key : "#{full_key}.#{key}"
       if value.is_a? String
         errors.concat validate_item(full_subkey, value)
       else
-        errors.concat verify_yaml_object(full_subkey, value)
+        errors.concat validate_yaml_object(full_subkey, value)
       end
     end
     errors
