@@ -29,6 +29,17 @@ describe Validator do
         ]
       end
     end
+    
+    describe "invalid yaml files" do
+      it "returns invalid yaml error" do
+        validator = Validator.new('spec/fixtures/invalid_yml')
+        errors = validator.validate()
+        errors.should == [
+          "invalid.yml: found character that cannot start any token " + 
+            "while scanning for the next token at line 1 column 6"
+        ]
+      end
+    end
 
   end
   

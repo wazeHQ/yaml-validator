@@ -9,6 +9,7 @@ def main
   puts "Validating #{root_path}"
   errors = Validator.new(root_path).validate()
   puts errors
+  puts "\nfound #{errors.length} errors"
 end
 
 main()

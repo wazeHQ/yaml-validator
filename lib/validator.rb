@@ -21,11 +21,16 @@ class Validator
   end
   
   def validate_yaml(filepath)
-    yaml_object = YAML.load_file(filepath)
+    filename = File.basename(filepath)
+    
+    begin
+      yaml_object = YAML.load_file(filepath)
+    rescue Psych::SyntaxError => e
+      return [e.message.sub(/^\([^)]+\)/, filename)]
+    end
     yaml_object = yaml_object[yaml_object.keys[0]]
     errors = validate_yaml_object('', yaml_object)
     
-    filename = File.basename(filepath)
     errors.map { |err| "#{filename}: #{err}" }
   end
   
