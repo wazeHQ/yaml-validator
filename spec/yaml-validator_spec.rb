@@ -6,6 +6,15 @@ describe YamlValidator do
   
   describe "#validate" do
     
+    describe "no en.yml file" do
+      it "returns 'no en.yml' error" do
+        validator = YamlValidator.new('spec/fixtures')
+        errors = validator.validate()
+        errors.should == 
+          ['no en.yml file in the directory (an en.yml file is required as reference)']
+      end
+    end
+    
     describe "wrong_variables scenario" do
       it "returns two errors" do
         validator = YamlValidator.new('spec/fixtures/wrong_variables')

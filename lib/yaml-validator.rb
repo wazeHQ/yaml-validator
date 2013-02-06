@@ -8,11 +8,17 @@ class YamlValidator
   end
   
   def en_with_vars
-    @en ||= YAML.load_file(File.join(@root_path, 'en.yml'))['en']
+    fullpath = File.join(@root_path, 'en.yml')
+    return nil unless File.exists?(fullpath)
+
+    @en ||= YAML.load_file(fullpath)['en']
     @en_with_vars ||= get_all_variables(@en)
   end
   
   def validate()
+    if en_with_vars.nil?
+      return ["no en.yml file in the directory (an en.yml file is required as reference)"]
+    end
     yml_files = File.join(@root_path, '*.yml')
     errors = []
     Dir[yml_files].each do |filename|

@@ -6,10 +6,10 @@ def main
   root_path = '.'
   root_path = ARGV[0] if ARGV.length > 0
   
-  puts "Validating #{root_path}"
+  puts "Validating #{root_path}...\n\n"
   errors = YamlValidator.new(root_path).validate()
   puts errors
-  puts "\nfound #{errors.length} errors"
+  puts "\nfound #{errors.length} error(s)"
 end
 
 main()
