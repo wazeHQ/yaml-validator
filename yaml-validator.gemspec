@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["3david@gmail.com"]
   gem.description   = %q{YAML locales validator}
   gem.summary       = %q{Validates .yml locale files for Ruby on Rails projects}
-  gem.homepage      = ""
+  gem.homepage      = "http://github.com/wazeHQ/yaml-validator"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
