@@ -38,7 +38,6 @@ class YamlValidator
   
   def validate_yaml(filepath)
     filename = File.basename(filepath)
-    puts "Validating #{filepath}"
     
     begin
       yaml_object = YAML.load_file(filepath)
@@ -58,9 +57,6 @@ class YamlValidator
     return [] if yaml_object.nil?
     errors = []
     
-    puts "full_key = #{full_key}"
-    puts "yaml_object = #{yaml_object}"
-
     yaml_object.each do |key, value|
       full_subkey = (full_key.empty?) ? key : "#{full_key}.#{key}"
       if value.is_a? String

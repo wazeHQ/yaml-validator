@@ -1,15 +1,21 @@
 #!/usr/bin/env ruby
 
 require_relative '../lib/yaml-validator'
+require 'colorize'
 
 def main
   root_path = '.'
   root_path = ARGV[0] if ARGV.length > 0
   
-  puts "Validating #{root_path}...\n\n"
+  puts "Validating #{root_path}...\n\n".colorize(:blue).underline
   errors = YamlValidator.new(root_path).validate()
   puts errors
-  puts "\nfound #{errors.length} error(s)"
+  
+  if errors.length > 0
+    puts "\nfound #{errors.length} error(s)".colorize(:red).underline
+  else
+    puts "no errors".colorize(:green).underline
+  end
 end
 
 main()

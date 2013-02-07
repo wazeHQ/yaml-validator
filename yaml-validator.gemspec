@@ -19,4 +19,5 @@ Gem::Specification.new do |gem|
   
   gem.add_dependency('rake')
   gem.add_dependency('rspec')
+  gem.add_dependency('colorize')
 end
