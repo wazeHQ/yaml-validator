@@ -40,3 +40,11 @@ nl.yml: parent_key.key1: missing variable 'var_with_typo' (available options var
 
 ```
 
+Changelog
+=========
+
+0.1.0
+-----
+
+* Added missing translations validation (strings that appear in en.yml but not in the other strings)
+
