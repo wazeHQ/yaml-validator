@@ -4,11 +4,18 @@ require_relative '../lib/yaml-validator'
 require 'colorize'
 
 def main
+  show_missing = true
+  if ARGV.include? '--no-missing'
+    show_missing = false 
+    ARGV.delete '--no-missing'
+  end
+
   root_path = '.'
   root_path = ARGV[0] if ARGV.length > 0
   
   puts "Validating #{root_path}...\n\n".colorize(:blue).underline
-  errors = YamlValidator.new(root_path).validate()
+  validator = YamlValidator.new(root_path, :show_missing => show_missing)
+  errors = validator.validate()
   puts errors
   
   if errors.length > 0

@@ -4,7 +4,9 @@ require_relative './helpers'
 
 class YamlValidator
   
-  def initialize(root_path)
+  def initialize(root_path, options = {})
+    @options = options
+    @options[:show_missing] ||= true
     @root_path = root_path
   end
   
@@ -48,7 +50,9 @@ class YamlValidator
     yaml_object = yaml_object[yaml_object.keys[0]]
     yaml_object = Helpers.normalize_yaml(yaml_object)
     errors = validate_yaml_object('', yaml_object)
-    errors.concat find_missing_translations(yaml_object)
+    if @options[:show_missing]
+      errors.concat find_missing_translations(yaml_object)
+    end
     
     errors.map { |err| "#{filename}: #{err}" }
   end
