@@ -34,7 +34,9 @@ describe YamlValidator do
           "he.yml: parent1.key1.subkey1 doesn't exist in en.yml",
           "he.yml: parent2.key2 doesn't exist in en.yml",
           "he.yml: key3 doesn't exist in en.yml",
-          "he.yml: parent3.key4 doesn't exist in en.yml"
+          "he.yml: parent3.key4 doesn't exist in en.yml",
+          "he.yml: missing translation for parent1.key1 ('Hello, %{name}, this is %{day_of_week}')",
+          "he.yml: missing translation for parent2.key2.subkey ('bla bla')"
         ]
       end
     end
@@ -46,6 +48,19 @@ describe YamlValidator do
         errors.should == [
           "invalid.yml: found character that cannot start any token " + 
             "while scanning for the next token at line 1 column 6"
+        ]
+      end
+    end
+    
+    describe "missing translations" do
+      it "returns invalid yaml error" do
+        validator = YamlValidator.new('spec/fixtures/missing_translations')
+        errors = validator.validate()
+        errors.should == [
+          "he.yml: missing translation for key2 ('value2')",
+          "he.yml: missing translation for parent2.key3 ('value3')",
+          "he.yml: missing translation for parent3.2 ('three')",
+          "he.yml: missing translation for parent3.3 ('')",
         ]
       end
     end
@@ -143,5 +158,49 @@ describe YamlValidator do
       end
     end
   end
+  
+  describe "#find_missing_translations" do
+    it "returns the missing translation keys" do
+      validator = YamlValidator.new('spec/fixtures/missing_translations')
+      
+      yaml_object = YAML.load_file('spec/fixtures/missing_translations/he.yml')['he']
+      yaml_object = Helpers.normalize_yaml(yaml_object)
+      
+      errors = validator.find_missing_translations(yaml_object)
+      errors.should == [
+        "missing translation for key2 ('value2')",
+        "missing translation for parent2.key3 ('value3')",
+        "missing translation for parent3.2 ('three')",
+        "missing translation for parent3.3 ('')"
+      ]
+    end
+  end
+  
+  describe "#find_key_in_yaml_object" do
+    it "handles subkeys" do
+      yaml_object = { 'parent1' => { 'key1' => 'value1' } }
+      YamlValidator.find_key_in_yaml_object('parent1.key1', yaml_object).should == 'value1'
+    end
+    
+    it "handles root keys" do
+      yaml_object = { "key2" => 'value2' }
+      YamlValidator.find_key_in_yaml_object('key2', yaml_object).should == 'value2'
+    end
+    
+    it "returns nil when a root key doesn't exist" do
+      yaml_object = { "key2" => 'value2' }
+      YamlValidator.find_key_in_yaml_object('key1', yaml_object).should be_nil
+    end
+    
+    it "returns nil when a subkey doesn't exist" do
+      yaml_object = { "parent1" => { "key2" => 'value2' } }
+      YamlValidator.find_key_in_yaml_object('parent1.key1', yaml_object).should be_nil
+    end
+    
+    it "returns nil when a subkey is an object" do
+      yaml_object = { "parent1" => { "parent2" => { "key1" => 'value1' } } }
+      YamlValidator.find_key_in_yaml_object('parent1.key2', yaml_object).should be_nil
+    end
 
+  end
 end

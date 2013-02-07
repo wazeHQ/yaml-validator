@@ -1,0 +1,12 @@
+en:
+  key1: 'value1'
+  parent1:
+    subkey1: 'value1'
+  key2: 'value2'
+  parent2:
+    key3: 'value3'
+  parent3:
+    - one
+    - :two
+    - three
+    -
