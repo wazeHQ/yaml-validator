@@ -47,9 +47,11 @@ class YamlValidator
       return [e.message.sub(/^\([^)]+\)/, filename)]
     end
     
+    errors = validate_root_language(yaml_object, File.basename(filename))
+
     yaml_object = yaml_object[yaml_object.keys[0]]
     yaml_object = Helpers.normalize_yaml(yaml_object)
-    errors = validate_yaml_object('', yaml_object)
+    errors += validate_yaml_object('', yaml_object)
     if @options[:show_missing]
       errors.concat find_missing_translations(yaml_object)
     end
@@ -57,6 +59,17 @@ class YamlValidator
     errors.map { |err| "#{filename}: #{err}" }
   end
   
+  def validate_root_language(yaml_object, file_name)
+    errors = []
+
+    lang = yaml_object.keys.first
+    if lang != file_name.split(".").first
+      errors << "invalid root language (#{lang})"
+    end
+
+    errors
+  end
+
   def validate_yaml_object(full_key, yaml_object)
     return [] if yaml_object.nil?
     errors = []

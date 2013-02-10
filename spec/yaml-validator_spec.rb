@@ -78,7 +78,19 @@ describe YamlValidator do
     end
   end
   
-  
+  describe "#validate_root_language" do
+    describe "file_name = he.yml, yaml_object = {es: parent1: 'foo'}" do
+      it "returns one error" do
+        validator = YamlValidator.new('spec/fixtures/wrong_root')
+        errors = validator.validate()
+        errors.should == [
+          "he.yml: invalid root language (es)",
+        ]
+
+      end
+    end
+  end
+
   describe "#validate_item" do
     describe "for 'parent1.key1' = 'hello %{name1}, %{day_of_week1}'" do
       it "returns two errors" do
