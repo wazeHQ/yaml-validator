@@ -155,7 +155,7 @@ class YamlValidator
   end
   
   def identify_variables(string)
-    string.scan(/%{([^}]+)}/).map { |v| v[0] }
+    string.scan(/%\{([^}]+)\}/).map(&:first)
   end
   
 end
