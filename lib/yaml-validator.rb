@@ -1,6 +1,7 @@
 require 'yaml'
 require 'yaml-validator/version'
 require_relative './helpers'
+require_relative './pluralization-validator'
 
 class YamlValidator
   
@@ -54,6 +55,7 @@ class YamlValidator
     errors += validate_yaml_object('', yaml_object)
     if @options[:show_missing]
       errors.concat find_missing_translations(yaml_object)
+      errors.concat find_missing_pluralizations(filename, yaml_object)
     end
     
     errors.map { |err| "#{filename}: #{err}" }
@@ -73,11 +75,12 @@ class YamlValidator
   def validate_yaml_object(full_key, yaml_object)
     return [] if yaml_object.nil?
     errors = []
+    is_pluralization = Helpers.pluralization? yaml_object
     
     yaml_object.each do |key, value|
       full_subkey = (full_key.empty?) ? key : "#{full_key}.#{key}"
       if value.is_a? String
-        errors.concat validate_item(full_subkey, value)
+        errors.concat validate_item(full_subkey, value, is_pluralization)
       else
         errors.concat validate_yaml_object(full_subkey, value)
       end
@@ -105,6 +108,11 @@ class YamlValidator
     end
     errors
   end
+
+  def find_missing_pluralizations(filename, yaml_object)
+    language = File.basename(filename, '.*')
+    PluralizationValidator.validate(language, yaml_object)
+  end
   
   def self.find_key_in_yaml_object(full_key, yaml_object)
     position = yaml_object
@@ -120,10 +128,14 @@ class YamlValidator
     end
   end
   
-  def validate_item(full_key, value)
+  def validate_item(full_key, value, is_pluralization = false)
     real_vars = get_key_en_vars(full_key)
     if real_vars.nil?
-      return ["#{full_key} doesn't exist in en.yml"]
+      if is_pluralization
+        return []
+      else
+        return ["#{full_key} doesn't exist in en.yml"]
+      end
     end
 
     used_vars = identify_variables(value)

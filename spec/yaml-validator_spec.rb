@@ -65,6 +65,17 @@ describe YamlValidator do
       end
     end
 
+    describe "weird pluralizations" do
+      it "returns missing pluralizations error" do
+        validator = YamlValidator.new('spec/fixtures/weird_pluralizations')
+        errors = validator.validate()
+        errors.should == [
+          "ru.yml: missing 'few' pluralization for 'dogs'",
+          "ru.yml: missing 'many' pluralization for 'dogs'",
+        ]
+      end
+    end
+
   end
   
   describe "#validate_yaml" do

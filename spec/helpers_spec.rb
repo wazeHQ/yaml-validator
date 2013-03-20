@@ -50,4 +50,16 @@ describe Helpers do
     end
   end
 
+  describe "#pluralization?" do
+    it "returns true when object has :one and :other" do
+      Helpers.pluralization?(:one => 'one', :other => 'other').should be_true
+    end
+    it "returns true when object has 'one' and 'other'" do
+      Helpers.pluralization?('one' => 'one', 'other' => 'other').should be_true
+    end
+    it "returns false for {}" do
+      Helpers.pluralization?({}).should be_false
+    end
+  end
+
 end

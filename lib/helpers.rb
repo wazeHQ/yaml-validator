@@ -20,5 +20,13 @@ module Helpers
     array.each_with_index { |val, i| hash[i.to_s] = val }
     hash
   end
+
+  def self.pluralization?(object)
+    return false if object.nil?
+
+    keys = object.keys.map { |k| k.to_sym }
+
+    (keys.include? :one) and (keys.include? :other)
+  end
   
 end

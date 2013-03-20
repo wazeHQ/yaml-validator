@@ -1,0 +1,9 @@
+ru:
+  dogs:
+    one: '1 dog'
+    other: '%{count} dogs'
+  cats:
+    one: '1 cat'
+    few: '%{count} cats'
+    many: '%{count} cats'
+    other: '%{count} cats'
