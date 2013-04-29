@@ -10,7 +10,7 @@ module Helpers
     
     normalized = {}
     yaml.each do |key, value|
-      normalized[key] = normalize_yaml(value)
+      normalized[key.to_s] = normalize_yaml(value)
     end
     normalized
   end

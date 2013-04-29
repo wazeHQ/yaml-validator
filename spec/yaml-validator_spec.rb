@@ -15,6 +15,15 @@ describe YamlValidator do
       end
     end
     
+    describe "numbered keys scenario" do
+      it "returns no errors" do
+        validator = YamlValidator.new('spec/fixtures/numbered_keys')
+        errors = validator.validate()
+        errors.should be_empty
+      end
+    end
+    
+    
     describe "wrong_variables scenario" do
       it "returns two errors" do
         validator = YamlValidator.new('spec/fixtures/wrong_variables')
