@@ -2,6 +2,7 @@ require 'yaml'
 require 'yaml-validator/version'
 require_relative './helpers'
 require_relative './pluralization-validator'
+require_relative './sanitized-html-validator'
 
 class YamlValidator
   
@@ -56,6 +57,7 @@ class YamlValidator
     if @options[:show_missing]
       errors.concat find_missing_translations(yaml_object)
       errors.concat find_missing_pluralizations(filename, yaml_object)
+      errors.concat find_unsanitized_html(filename, yaml_object)
     end
     
     errors.map { |err| "#{filename}: #{err}" }
@@ -182,6 +184,10 @@ class YamlValidator
   def identify_variables(string)
     string.scan(/%\{([^}]+)\}/).map(&:first)
   end
-  
+
+  def find_unsanitized_html(filename, yaml_object)
+    language = File.basename(filename, '.*')
+    SanitizedHtmlValidator.validate(language, yaml_object)
+  end
 end
 

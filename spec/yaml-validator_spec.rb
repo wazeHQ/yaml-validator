@@ -235,4 +235,21 @@ describe YamlValidator do
     end
 
   end
+
+  describe "#sanitized_html" do
+    it "returns the non-sanitized values" do
+      validator = YamlValidator.new('spec/fixtures/sanitized_html')
+      
+      filename = 'spec/fixtures/sanitized_html/en.yml'
+      yaml_object = YAML.load_file(filename)['en']
+      yaml_object = Helpers.normalize_yaml(yaml_object)
+      
+      errors = validator.find_unsanitized_html(filename, yaml_object)
+      errors.should == [
+        "unsanitized html in 'en.invalid1' (this is an <a href=\"spam.com\">invalid</a> value)",
+        "unsanitized html in 'en.invalid2' (this is an <strong onclick=\"spam.com\">invalid</strong> value)"
+      ]
+    end
+  end
+  
 end
