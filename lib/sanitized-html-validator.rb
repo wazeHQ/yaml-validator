@@ -24,6 +24,7 @@ class SanitizedHtmlValidator
   end
 
   def self.valid_html?(html)
+    html.gsub!(/(\s)&\s/, '&amp;')
     sanitized = Sanitize.clean(html, elements: [ 'strong', 'br', 'span', 'b', 'i' ]) 
     html == sanitized
   end

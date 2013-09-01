@@ -1,4 +1,5 @@
 en:
   valid: 'this is a <strong>valid</strong><br>value'
+  valid2: 'this is a valid & correct value'
   invalid1: 'this is an <a href="spam.com">invalid</a> value'
   invalid2: 'this is an <strong onclick="spam.com">invalid</strong> value'
