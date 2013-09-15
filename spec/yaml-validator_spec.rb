@@ -37,7 +37,7 @@ describe YamlValidator do
     
     describe "inconsistent_types scenario" do
       it "returns inconsistent type error" do
-        validator = YamlValidator.new('spec/fixtures/inconsistent_types')
+        validator = YamlValidator.new('spec/fixtures/inconsistent_types', missing: true)
         errors = validator.validate()
         errors.should == [
           "he.yml: parent1.key1.subkey1 doesn't exist in en.yml",
@@ -63,7 +63,7 @@ describe YamlValidator do
     
     describe "missing translations" do
       it "returns invalid yaml error" do
-        validator = YamlValidator.new('spec/fixtures/missing_translations')
+        validator = YamlValidator.new('spec/fixtures/missing_translations', missing: true)
         errors = validator.validate()
         errors.should == [
           "he.yml: missing translation for key2 ('value2')",
@@ -76,7 +76,7 @@ describe YamlValidator do
 
     describe "weird pluralizations" do
       it "returns missing pluralizations error" do
-        validator = YamlValidator.new('spec/fixtures/weird_pluralizations')
+        validator = YamlValidator.new('spec/fixtures/weird_pluralizations', missing: true)
         errors = validator.validate()
         errors.should == [
           "ru.yml: missing 'few' pluralization for 'dogs'",

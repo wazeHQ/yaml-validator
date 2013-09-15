@@ -53,12 +53,12 @@ class YamlValidator
     yaml_object = yaml_object[yaml_object.keys[0]]
     yaml_object = Helpers.normalize_yaml(yaml_object)
     errors += validate_yaml_object('', yaml_object)
-    if @options.missing?
+    if @options[:missing]
       errors.concat find_missing_translations(yaml_object)
       errors.concat find_missing_pluralizations(filename, yaml_object)
     end
 
-    if @options.sanitize?
+    if @options[:sanitize]
       errors.concat find_unsanitized_html(filename, yaml_object)
     end
     
