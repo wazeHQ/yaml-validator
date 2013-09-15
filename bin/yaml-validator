@@ -1,28 +1,34 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/yaml-validator'
+require 'thor'
 require 'colorize'
+require_relative '../lib/yaml-validator'
 
-def main
-  show_missing = true
-  if ARGV.include? '--no-missing'
-    show_missing = false 
-    ARGV.delete '--no-missing'
+class YamlValidatorApp < Thor
+
+  desc "validate [ROOT_PATH]", "validates the files in the current directory"
+  option :missing, :type => :boolean, :default => true, :aliases => '-m', :desc => 'show missing translations'
+  option :sanitize, :type => :boolean, :default => false, :aliases => '-s', :desc => 'check for sanitized html'
+  def validate(root_path = '.')
+    puts "Validating #{root_path}...\n\n".colorize(:blue).underline
+    validator = YamlValidator.new(root_path, options)
+    errors = validator.validate()
+    puts errors
+    
+    if errors.length > 0
+      puts "\nfound #{errors.length} error(s)".colorize(:red).underline
+    else
+      puts "no errors".colorize(:green).underline
+    end
   end
 
-  root_path = '.'
-  root_path = ARGV[0] if ARGV.length > 0
-  
-  puts "Validating #{root_path}...\n\n".colorize(:blue).underline
-  validator = YamlValidator.new(root_path, :show_missing => show_missing)
-  errors = validator.validate()
-  puts errors
-  
-  if errors.length > 0
-    puts "\nfound #{errors.length} error(s)".colorize(:red).underline
-  else
-    puts "no errors".colorize(:green).underline
+  desc "version", "shows the version of Yaml Validator"
+  def version
+    puts YamlValidator::VERSION
   end
+
+  default_task :validate
+
 end
 
-main()
+YamlValidatorApp.start

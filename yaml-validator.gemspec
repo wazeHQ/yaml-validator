@@ -21,4 +21,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency('rspec')
   gem.add_dependency('colorize')
   gem.add_dependency('sanitize')
+  gem.add_dependency('thor')
 end
