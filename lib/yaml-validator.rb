@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'yaml'
 require 'yaml-validator/version'
 require_relative './helpers'
