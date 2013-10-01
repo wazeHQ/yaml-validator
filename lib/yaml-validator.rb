@@ -133,6 +133,28 @@ class YamlValidator
   end
   
   def validate_item(full_key, value, is_pluralization = false)
+    errors = validate_item_vars(full_key, value, is_pluralization)
+    errors.concat validate_item_characters(full_key, value)
+    errors
+  end
+
+  def validate_item_characters(full_key, value)
+    bad_chars = '⏎'
+    bad_chars_found = []
+    bad_chars.each_char do |ch|
+      if value.include? ch
+        bad_chars_found << ch
+      end
+    end
+
+    if bad_chars_found.any?
+      return ["#{full_key}: bad characters (#{bad_chars_found.join(', ')} ) in '#{value}'"]
+    else
+      return []
+    end
+  end
+
+  def validate_item_vars(full_key, value, is_pluralization = false)
     real_vars = get_key_en_vars(full_key)
     if real_vars.nil?
       if is_pluralization

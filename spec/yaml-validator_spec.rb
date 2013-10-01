@@ -34,6 +34,16 @@ describe YamlValidator do
         ]
       end
     end
+
+    describe "bad_chars scenario" do
+      it "returns two errors" do
+        validator = YamlValidator.new('spec/fixtures/bad_chars')
+        errors = validator.validate()
+        errors.should == [
+          "he.yml: key1: bad characters (⏎ ) in 'line1 ⏎ line2'",
+        ]
+      end
+    end
     
     describe "inconsistent_types scenario" do
       it "returns inconsistent type error" do
