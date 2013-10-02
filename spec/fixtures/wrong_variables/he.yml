@@ -1,3 +1,5 @@
 he:
   parent1:
     key1: "Hello, %{name1}, this is %{day_of_week1}"
+    key2: "Hello, {name1}%"
+    key3: "Hello, {name1}"

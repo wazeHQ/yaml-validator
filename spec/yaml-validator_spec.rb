@@ -25,12 +25,14 @@ describe YamlValidator do
     
     
     describe "wrong_variables scenario" do
-      it "returns two errors" do
+      it "returns errors" do
         validator = YamlValidator.new('spec/fixtures/wrong_variables')
         errors = validator.validate()
         errors.should == [
           "he.yml: parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
-          "he.yml: parent1.key1: missing variable 'day_of_week1' (available options: name, day_of_week)"
+          "he.yml: parent1.key1: missing variable 'day_of_week1' (available options: name, day_of_week)",
+          "he.yml: parent1.key2: invalid syntax ' {name1}%'",
+          "he.yml: parent1.key3: invalid syntax ' {name1}'"
         ]
       end
     end

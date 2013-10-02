@@ -183,9 +183,17 @@ class YamlValidator
       end
     end
 
+    syntax_error = /(^|[^%]){[^}]+}%?/.match(value)
+    unless syntax_error.nil?
+      return [
+        "#{full_key}: invalid syntax '#{syntax_error}'"
+      ]
+    end
+
     used_vars = identify_variables(value)
 
     errors = []
+
     used_vars.each do |var|
       unless real_vars.include? var
         errors << "#{full_key}: missing variable '#{var}' (available options: #{real_vars.join(', ')})"
