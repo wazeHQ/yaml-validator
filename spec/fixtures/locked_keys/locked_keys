@@ -1,0 +1,4 @@
+^locked_key[0-9]
+key3.locked_subkey1
+locked_subkey2
+items.[0-9]+.locked_key

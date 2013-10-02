@@ -4,19 +4,21 @@ require 'yaml-validator/version'
 require_relative './helpers'
 require_relative './pluralization-validator'
 require_relative './sanitized-html-validator'
+require_relative './locked_keys'
 
 class YamlValidator
   
   def initialize(root_path, options = {})
     @options = options
     @root_path = root_path
+    @locked_keys = LockedKeys.new(@root_path) unless @root_path.nil?
   end
   
   def en
     return @en unless @en.nil?
 
     fullpath = File.join(@root_path, 'en.yml')
-    return nil unless File.exists?(fullpath)
+    return nil unless File.readable?(fullpath)
 
     @en = YAML.load_file(fullpath)['en']
     @en = Helpers.normalize_yaml(@en)
@@ -136,7 +138,23 @@ class YamlValidator
   def validate_item(full_key, value, is_pluralization = false)
     errors = validate_item_vars(full_key, value, is_pluralization)
     errors.concat validate_item_characters(full_key, value)
+    errors.concat validate_locked_key(full_key, value)
     errors
+  end
+
+  def validate_locked_key(full_key, value)
+    errors = []
+    if @locked_keys.locked? full_key
+      locked_value = find_english_value(full_key)
+      if locked_value != value
+        errors << "#{full_key}: locked key value changed from '#{locked_value}' to '#{value}'"
+      end
+    end
+    errors
+  end
+
+  def find_english_value(full_key)
+    self.class.find_key_in_yaml_object(full_key, en)
   end
 
   def validate_item_characters(full_key, value)

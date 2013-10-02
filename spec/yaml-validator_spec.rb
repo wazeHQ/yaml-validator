@@ -35,6 +35,21 @@ describe YamlValidator do
       end
     end
 
+    describe "locked_keys scenario" do
+      it "returns errors" do
+        validator = YamlValidator.new('spec/fixtures/locked_keys', missing: false)
+        errors = validator.validate()
+        errors.should == [
+          "es.yml: locked_key2: locked key value changed from 'locked value' to 'changed value'",
+          "es.yml: locked_key3: locked key value changed from 'locked value' to 'changed value'",
+          "es.yml: key3.locked_subkey1: locked key value changed from 'locked value' to 'changed value'",
+          "es.yml: key3.locked_subkey2: locked key value changed from 'locked value' to 'changed value'",
+          "es.yml: items.0.locked_key1: locked key value changed from 'locked value' to 'changed value'",
+          "es.yml: items.1.locked_key1: locked key value changed from 'locked value' to 'changed value'"
+        ]
+      end
+    end
+
     describe "bad_chars scenario" do
       it "returns two errors" do
         validator = YamlValidator.new('spec/fixtures/bad_chars')

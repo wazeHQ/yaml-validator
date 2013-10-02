@@ -1,0 +1,15 @@
+es:
+  key1: different value
+  locked_key1: locked value
+  locked_key2: changed value
+  locked_key3: changed value
+  unlocked_key4: changed value
+  key3:
+    subkey1: value
+    locked_subkey1: changed value
+    locked_subkey2: changed value
+  items:
+    - locked_key1: changed value
+      unlocked_key1: changed value
+    - locked_key1: changed value
+

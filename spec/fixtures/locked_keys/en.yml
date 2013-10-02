@@ -1,0 +1,15 @@
+en:
+  key1: value
+  locked_key1: locked value
+  locked_key2: locked value
+  locked_key3: locked value
+  unlocked_key4: locked value
+  key3:
+    subkey1: value
+    locked_subkey1: locked value
+    locked_subkey2: locked value
+  items:
+    - locked_key1: locked value
+      unlocked_key1: bla bla
+    - locked_key1: locked value
+
