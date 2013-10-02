@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    yaml-validator (0.1.8)
+    yaml-validator (0.1.9)
       colorize
       rake
       rspec
