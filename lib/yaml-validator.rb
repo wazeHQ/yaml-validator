@@ -20,7 +20,7 @@ class YamlValidator
     fullpath = File.join(@root_path, 'en.yml')
     return nil unless File.readable?(fullpath)
 
-    @en = YAML.load_file(fullpath)['en']
+    @en = YAML.load_file(fullpath)
     @en = Helpers.normalize_yaml(@en)
   end
   

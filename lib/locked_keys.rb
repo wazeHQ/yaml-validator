@@ -3,7 +3,7 @@ class LockedKeys
     @locked_patterns = []
 
     fullpath = File.join(root_path, 'locked_keys')
-    if File.exists? fullpath
+    if File.exist? fullpath
       read_locked_patterns(fullpath) unless File.directory?(fullpath)
     end
   end
