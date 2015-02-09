@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'pry'
 require 'yaml'
 require 'yaml-validator/version'
 require_relative './helpers'
@@ -22,11 +23,14 @@ class YamlValidator
 
     @en = YAML.load_file(fullpath)
     @en = Helpers.normalize_yaml(@en)
+binding.pry
   end
   
   def en_with_vars
     return nil if en.nil?
+binding.pry
     @en_with_vars ||= get_all_variables(en)
+binding.pry
   end
   
   def validate()
@@ -65,7 +69,7 @@ class YamlValidator
       errors.concat find_unsanitized_html(filename, yaml_object)
     end
     
-    errors.map { |err| "#{filename}: #{err}" }
+    errors.map { |err| "#{@root_path}#{filename}: #{err}" }
   end
   
   def validate_root_language(yaml_object, file_name)
@@ -104,6 +108,7 @@ class YamlValidator
     errors = []
     
     en_yaml_object.each do |key, value|
+binding.pry
       full_subkey = (full_key.empty?) ? key : "#{full_key}.#{key}"
       if value.is_a? String or value.is_a? Symbol
         if self.class.find_key_in_yaml_object(full_subkey, yaml_object).nil?
@@ -219,12 +224,11 @@ class YamlValidator
   def get_all_variables(yaml_object)
     return {} if yaml_object.nil?
     with_vars = {}
-    
     yaml_object.each do |key, value|
       if value.is_a? String
         with_vars[key] = identify_variables(value)
-      elsif value.is_a? Symbol
-        with_vars[key] = {}
+#      elsif value.is_a? Symbol
+#        with_vars[key] = {}
       else
         with_vars[key] = get_all_variables(value)
       end

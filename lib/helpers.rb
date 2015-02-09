@@ -1,3 +1,5 @@
+require 'pry'
+
 module Helpers
   
   def self.normalize_yaml(yaml)
@@ -23,7 +25,6 @@ module Helpers
 
   def self.pluralization?(object)
     return false if object.nil?
-
     keys = object.keys.map { |k| k.to_sym }
 
     (keys.include? :one) and (keys.include? :other)

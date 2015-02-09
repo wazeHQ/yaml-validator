@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-
+require 'pry'
 require 'thor'
 require 'colorize'
 require_relative '../lib/yaml-validator'
@@ -7,12 +7,24 @@ require_relative '../lib/yaml-validator'
 class YamlValidatorApp < Thor
 
   desc "validate [ROOT_PATH]", "validates the files in the current directory"
-  option :missing, :type => :boolean, :default => true, :aliases => '-m', :desc => 'show missing translations'
+  option :missing, :type => :boolean, :default => false, :aliases => '-m', :desc => 'show missing translations'
   option :sanitize, :type => :boolean, :default => false, :aliases => '-s', :desc => 'check for sanitized html'
+  option :recursive, :type => :boolean, :default => true, :aliases => '-r', :desc => 'validate recursively through directories'
   def validate(root_path = '.')
     puts "Validating #{root_path}...\n\n".colorize(:blue).underline
-    validator = YamlValidator.new(root_path, options)
-    errors = validator.validate()
+    
+    path = []
+
+    if options[:recursive] 
+      path << (Dir.glob(root_path + "**/*/").empty? ? root_path : Dir.glob(root_path+"**/*/"))
+    end
+
+    errors = []
+binding.pry
+    path.each do |path|
+      validator = YamlValidator.new(path, options)
+      errors << validator.validate()
+    end
     puts errors
     
     if errors.length > 0
