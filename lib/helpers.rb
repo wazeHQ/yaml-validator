@@ -1,5 +1,3 @@
-require 'pry'
-
 module Helpers
   
   def self.normalize_yaml(yaml)
