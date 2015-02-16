@@ -15,12 +15,12 @@ class YamlValidatorApp < Thor
     path = []
 
     if options[:recursive] 
-      path << (Dir.glob(root_path + "**/*/").empty? ? root_path : Dir.glob(root_path+"**/*/"))
+      path = (Dir.glob(root_path + "**/*/").empty? ? root_path : Dir.glob(root_path+"**/*/"))
     end
 
     errors = []
-    path.each do |path|
-      validator = YamlValidator.new(path, options)
+    path.each do |p|
+      validator = YamlValidator.new(p, options)
       errors << validator.validate()
     end
     puts errors

@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'yaml'
 require 'yaml-validator/version'
 require_relative './helpers'
 require_relative './pluralization-validator'
@@ -8,9 +7,9 @@ require_relative './locked_keys'
 
 class YamlValidator
   
-  def initialize(root_path, options = {})
+  def initialize(path, options = {})
     @options = options
-    @root_path = root_path
+    @root_path = path
     @locked_keys = LockedKeys.new(@root_path) unless @root_path.nil?
   end
   
@@ -30,7 +29,7 @@ class YamlValidator
   
   def validate()
     if en_with_vars.nil?
-      return ["no en.yml file in the directory (an en.yml file is required as reference)"]
+      return ["#{@root_path} : no en.yml file in the directory (an en.yml file is required as reference)"]
     end
     yml_files = File.join(@root_path, '*.yml')
     errors = []
