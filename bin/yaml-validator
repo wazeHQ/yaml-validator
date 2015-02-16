@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'pry'
 require 'thor'
 require 'colorize'
 require_relative '../lib/yaml-validator'
@@ -20,7 +19,6 @@ class YamlValidatorApp < Thor
     end
 
     errors = []
-binding.pry
     path.each do |path|
       validator = YamlValidator.new(path, options)
       errors << validator.validate()

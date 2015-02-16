@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'pry'
 require 'yaml'
 require 'yaml-validator/version'
 require_relative './helpers'
@@ -17,20 +16,16 @@ class YamlValidator
   
   def en
     return @en unless @en.nil?
-
     fullpath = File.join(@root_path, 'en.yml')
     return nil unless File.readable?(fullpath)
 
     @en = YAML.load_file(fullpath)
     @en = Helpers.normalize_yaml(@en)
-binding.pry
   end
   
   def en_with_vars
     return nil if en.nil?
-binding.pry
     @en_with_vars ||= get_all_variables(en)
-binding.pry
   end
   
   def validate()
@@ -108,7 +103,7 @@ binding.pry
     errors = []
     
     en_yaml_object.each do |key, value|
-binding.pry
+
       full_subkey = (full_key.empty?) ? key : "#{full_key}.#{key}"
       if value.is_a? String or value.is_a? Symbol
         if self.class.find_key_in_yaml_object(full_subkey, yaml_object).nil?
@@ -208,7 +203,7 @@ binding.pry
   end
   
   def get_key_en_vars(full_key)
-    position = en_with_vars
+    position = en_with_vars['en']
     full_key.split('.').each do |key|
       return nil if position.is_a? Array
       return nil if position.nil?
@@ -223,12 +218,13 @@ binding.pry
   
   def get_all_variables(yaml_object)
     return {} if yaml_object.nil?
+
     with_vars = {}
     yaml_object.each do |key, value|
       if value.is_a? String
         with_vars[key] = identify_variables(value)
-#      elsif value.is_a? Symbol
-#        with_vars[key] = {}
+      elsif value.is_a? Symbol
+        with_vars[key] = {}
       else
         with_vars[key] = get_all_variables(value)
       end
