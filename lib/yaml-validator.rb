@@ -217,8 +217,8 @@ class YamlValidator
   
   def get_all_variables(yaml_object)
     return {} if yaml_object.nil?
-
     with_vars = {}
+
     yaml_object.each do |key, value|
       if value.is_a? String
         with_vars[key] = identify_variables(value)
