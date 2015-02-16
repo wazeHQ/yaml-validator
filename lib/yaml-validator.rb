@@ -103,7 +103,6 @@ class YamlValidator
     errors = []
     
     en_yaml_object.each do |key, value|
-
       full_subkey = (full_key.empty?) ? key : "#{full_key}.#{key}"
       if value.is_a? String or value.is_a? Symbol
         if self.class.find_key_in_yaml_object(full_subkey, yaml_object).nil?
