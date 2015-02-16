@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'yaml'
 require 'yaml-validator/version'
 require_relative './helpers'
 require_relative './pluralization-validator'
@@ -18,7 +19,7 @@ class YamlValidator
     fullpath = File.join(@root_path, 'en.yml')
     return nil unless File.readable?(fullpath)
 
-    @en = YAML.load_file(fullpath)
+    @en = YAML.load_file(fullpath)['en']
     @en = Helpers.normalize_yaml(@en)
   end
   
@@ -202,7 +203,7 @@ class YamlValidator
   end
   
   def get_key_en_vars(full_key)
-    position = en_with_vars['en']
+    position = en_with_vars
     full_key.split('.').each do |key|
       return nil if position.is_a? Array
       return nil if position.nil?

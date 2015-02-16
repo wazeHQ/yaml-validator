@@ -15,7 +15,7 @@ class YamlValidatorApp < Thor
     path = []
 
     if options[:recursive] 
-      path = (Dir.glob(root_path + "**/*/").empty? ? root_path : Dir.glob(root_path+"**/*/"))
+      path = (Dir.glob(root_path + "**/*/").empty? ? [root_path] : Dir.glob(root_path+"**/*/"))
     end
 
     errors = []
