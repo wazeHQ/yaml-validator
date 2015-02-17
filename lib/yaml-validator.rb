@@ -64,7 +64,7 @@ class YamlValidator
       errors.concat find_unsanitized_html(filename, yaml_object)
     end
     
-    errors.map { |err| "#{@root_path}#{filename}: #{err}" }
+    errors.map { |err| "#{@root_path}/#{filename}: #{err}" }
   end
   
   def validate_root_language(yaml_object, file_name)
