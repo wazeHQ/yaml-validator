@@ -8,10 +8,10 @@ describe YamlValidator do
     
     describe "no en.yml file" do
       it "returns 'no en.yml' error" do
-        validator = YamlValidator.new('spec/fixtures')
+        validator = YamlValidator.new('spec/fixtures/no_en')
         errors = validator.validate()
         errors.should == 
-          ['no en.yml file in the directory (an en.yml file is required as reference)']
+          ['spec/fixtures/no_en : no en.yml file in the directory (an en.yml file is required as reference)']
       end
     end
     
@@ -29,10 +29,10 @@ describe YamlValidator do
         validator = YamlValidator.new('spec/fixtures/wrong_variables')
         errors = validator.validate()
         errors.should == [
-          "he.yml: parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
-          "he.yml: parent1.key1: missing variable 'day_of_week1' (available options: name, day_of_week)",
-          "he.yml: parent1.key2: invalid syntax ' {name1}%'",
-          "he.yml: parent1.key3: invalid syntax ' {name1}'"
+          "spec/fixtures/wrong_variables/he.yml: parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
+          "spec/fixtures/wrong_variables/he.yml: parent1.key1: missing variable 'day_of_week1' (available options: name, day_of_week)",
+          "spec/fixtures/wrong_variables/he.yml: parent1.key2: invalid syntax ' {name1}%'",
+          "spec/fixtures/wrong_variables/he.yml: parent1.key3: invalid syntax ' {name1}'"
         ]
       end
     end
@@ -42,12 +42,12 @@ describe YamlValidator do
         validator = YamlValidator.new('spec/fixtures/locked_keys', missing: false)
         errors = validator.validate()
         errors.should == [
-          "es.yml: locked_key2: locked key value changed from 'locked value' to 'changed value'",
-          "es.yml: locked_key3: locked key value changed from 'locked value' to 'changed value'",
-          "es.yml: key3.locked_subkey1: locked key value changed from 'locked value' to 'changed value'",
-          "es.yml: key3.locked_subkey2: locked key value changed from 'locked value' to 'changed value'",
-          "es.yml: items.0.locked_key1: locked key value changed from 'locked value' to 'changed value'",
-          "es.yml: items.1.locked_key1: locked key value changed from 'locked value' to 'changed value'"
+          "spec/fixtures/locked_keys/es.yml: locked_key2: locked key value changed from 'locked value' to 'changed value'",
+          "spec/fixtures/locked_keys/es.yml: locked_key3: locked key value changed from 'locked value' to 'changed value'",
+          "spec/fixtures/locked_keys/es.yml: key3.locked_subkey1: locked key value changed from 'locked value' to 'changed value'",
+          "spec/fixtures/locked_keys/es.yml: key3.locked_subkey2: locked key value changed from 'locked value' to 'changed value'",
+          "spec/fixtures/locked_keys/es.yml: items.0.locked_key1: locked key value changed from 'locked value' to 'changed value'",
+          "spec/fixtures/locked_keys/es.yml: items.1.locked_key1: locked key value changed from 'locked value' to 'changed value'"
         ]
       end
     end
@@ -57,7 +57,7 @@ describe YamlValidator do
         validator = YamlValidator.new('spec/fixtures/bad_chars')
         errors = validator.validate()
         errors.should == [
-          "he.yml: key1: bad characters (⏎ ) in 'line1 ⏎ line2'",
+          "spec/fixtures/bad_chars/he.yml: key1: bad characters (⏎ ) in 'line1 ⏎ line2'",
         ]
       end
     end
@@ -67,12 +67,12 @@ describe YamlValidator do
         validator = YamlValidator.new('spec/fixtures/inconsistent_types', missing: true)
         errors = validator.validate()
         errors.should == [
-          "he.yml: parent1.key1.subkey1 doesn't exist in en.yml",
-          "he.yml: parent2.key2 doesn't exist in en.yml",
-          "he.yml: key3 doesn't exist in en.yml",
-          "he.yml: parent3.key4 doesn't exist in en.yml",
-          "he.yml: missing translation for parent1.key1 ('Hello, %{name}, this is %{day_of_week}')",
-          "he.yml: missing translation for parent2.key2.subkey ('bla bla')"
+          "spec/fixtures/inconsistent_types/he.yml: parent1.key1.subkey1 doesn't exist in en.yml",
+          "spec/fixtures/inconsistent_types/he.yml: parent2.key2 doesn't exist in en.yml",
+          "spec/fixtures/inconsistent_types/he.yml: key3 doesn't exist in en.yml",
+          "spec/fixtures/inconsistent_types/he.yml: parent3.key4 doesn't exist in en.yml",
+          "spec/fixtures/inconsistent_types/he.yml: missing translation for parent1.key1 ('Hello, %{name}, this is %{day_of_week}')",
+          "spec/fixtures/inconsistent_types/he.yml: missing translation for parent2.key2.subkey ('bla bla')"
         ]
       end
     end
@@ -93,10 +93,10 @@ describe YamlValidator do
         validator = YamlValidator.new('spec/fixtures/missing_translations', missing: true)
         errors = validator.validate()
         errors.should == [
-          "he.yml: missing translation for key2 ('value2')",
-          "he.yml: missing translation for parent2.key3 ('value3')",
-          "he.yml: missing translation for parent3.2 ('three')",
-          "he.yml: missing translation for parent3.3 ('')",
+          "spec/fixtures/missing_translations/he.yml: missing translation for key2 ('value2')",
+          "spec/fixtures/missing_translations/he.yml: missing translation for parent2.key3 ('value3')",
+          "spec/fixtures/missing_translations/he.yml: missing translation for parent3.2 ('three')",
+          "spec/fixtures/missing_translations/he.yml: missing translation for parent3.3 ('')",
         ]
       end
     end
@@ -106,8 +106,8 @@ describe YamlValidator do
         validator = YamlValidator.new('spec/fixtures/weird_pluralizations', missing: true)
         errors = validator.validate()
         errors.should == [
-          "ru.yml: missing 'few' pluralization for 'dogs'",
-          "ru.yml: missing 'many' pluralization for 'dogs'",
+          "spec/fixtures/weird_pluralizations/ru.yml: missing 'few' pluralization for 'dogs'",
+          "spec/fixtures/weird_pluralizations/ru.yml: missing 'many' pluralization for 'dogs'",
         ]
       end
     end
@@ -119,8 +119,8 @@ describe YamlValidator do
       validator = YamlValidator.new('spec/fixtures/wrong_variables')
       errors = validator.validate_yaml('spec/fixtures/wrong_variables/he.yml')
       errors == [
-        "he.yml: parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
-        "he.yml: parent1.key1: missing variable 'day_of_week1' (available options: name, day_of_week)"
+        "spec/fixtures/wrong_variables/he.yml: parent1.key1: missing variable 'name1' (available options: name, day_of_week)",
+        "spec/fixtures/wrong_variables/he.yml: parent1.key1: missing variable 'day_of_week1' (available options: name, day_of_week)"
       ]
     end
   end
@@ -131,7 +131,7 @@ describe YamlValidator do
         validator = YamlValidator.new('spec/fixtures/wrong_root')
         errors = validator.validate()
         errors.should == [
-          "he.yml: invalid root language (es)",
+          "spec/fixtures/wrong_root/he.yml: invalid root language (es)",
         ]
 
       end
