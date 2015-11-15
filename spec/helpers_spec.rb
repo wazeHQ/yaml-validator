@@ -52,13 +52,13 @@ describe Helpers do
 
   describe "#pluralization?" do
     it "returns true when object has :one and :other" do
-      Helpers.pluralization?(:one => 'one', :other => 'other').should be_true
+      Helpers.pluralization?(:one => 'one', :other => 'other').should be true
     end
     it "returns true when object has 'one' and 'other'" do
-      Helpers.pluralization?('one' => 'one', 'other' => 'other').should be_true
+      Helpers.pluralization?('one' => 'one', 'other' => 'other').should be true
     end
     it "returns false for {}" do
-      Helpers.pluralization?({}).should be_false
+      Helpers.pluralization?({}).should be false
     end
   end
 
